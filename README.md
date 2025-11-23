@@ -160,13 +160,11 @@ self.model = "llama-3.1-8b-instant"  # Groq model
 - Add conversation memory
 - Deploy as REST API
 
-## 📄 License
-
-MIT License - free to use for learning and projects
-
 ## 🤝 Contributing
 
-Contributions welcome! Open an issue or submit a PR.
+Contributions are always welcome!
+If you have questions, suggestions, or ideas to improve this project, feel free to open an issue or submit a PR
+I’m always happy to learn and build together!
 
 ---
 
