@@ -1,236 +1,190 @@
-# 🚀 RAG System with Groq, ChromaDB & Sentence Transformers
+# RAG System with Groq, ChromaDB & Sentence Transformers
 
-A **Retrieval-Augmented Generation (RAG) System** that answers questions from your JSON documents using Groq LLM, ChromaDB vector database, and Sentence Transformers.
+A Retrieval-Augmented Generation (RAG) system that enables semantic search and question-answering over JSON publication data using Groq LLM, ChromaDB vector database, and Sentence Transformers.
 
-## ✨ Features
+## Features
 
-- ⚡ **Fast**: Groq LLM inference + ChromaDB vector search
-- 🔍 **Semantic Search**: Find relevant documents using embeddings
-- 💾 **Local Storage**: No cloud dependencies
-- 🆓 **Free**: Groq free tier + local embeddings
+- **Fast LLM Inference**: Powered by Groq's ultra-fast API
+- **Semantic Search**: ChromaDB vector database for intelligent document retrieval
+- **Local Embeddings**: Sentence Transformers for cost-effective embeddings
+- **JSON Data Processing**: Automatically processes and indexes publication data
+- **Persistent Storage**: ChromaDB saves embeddings locally for reuse
+- **Context-Aware Responses**: Retrieves relevant documents before generating answers
 
-## 📋 Prerequisites
+## System Architecture
+
+- **Data Layer**: JSON publication storage
+- **Processing Layer**: Token-based chunking with overlap
+- **Vector Layer**: ChromaDB with sentence embeddings
+- **LLM Layer**: Groq API for response generation
+
+## How It Works
+
+1. **Document Processing**: JSON publications are loaded and chunked into manageable pieces
+2. **Embedding Creation**: Each chunk is converted to vector embeddings using Sentence Transformers
+3. **Vector Storage**: Embeddings are stored in ChromaDB for efficient similarity search
+4. **Query Processing**: User queries are embedded and matched against stored vectors
+5. **Context Retrieval**: Top relevant chunks are retrieved based on similarity
+6. **Response Generation**: Retrieved context is sent to Groq LLM for answer generation
+
+## Prerequisites
 
 - Python 3.8+
-- Groq API Key (FREE at [console.groq.com](https://console.groq.com/))
-- Basic understanding of Python
+- Groq API Key (get for free at [console.groq.com](https://console.groq.com/))
 
----
+## Installation
 
-## 🚀 Quick Start Guide
-
-### 🔥 Step 1: Create Groq API Key
-
-1. Go to: https://console.groq.com
-2. Sign in (create account if needed)
-3. Click **API Keys** → **Create Key**
-4. Copy the key starting with `gsk_...`
-
-### 🛠 Step 2: Set Up Project
-
+1. Clone this repository
+2. Create a virtual environment:
 ```bash
-# Create project directory
-mkdir my-rag-project
-cd my-rag-project
-
-# Create virtual environment
 python -m venv rag_env
+```
 
-# Activate virtual environment
-rag_env\Scripts\activate     # Windows
-# source rag_env/bin/activate  # Mac/Linux
+3. Activate the virtual environment:
+```bash
+# Windows
+rag_env\Scripts\activate
 
-# Install required packages
+# Mac/Linux
+source rag_env/bin/activate
+```
+
+4. Install dependencies:
+```bash
 pip install groq chromadb sentence-transformers tiktoken python-dotenv
 ```
 
-### 🔑 Step 3: Configure Environment Variables
-
-Create a `.env` file in the project root:
-
+5. Create a `.env` file in the project root:
 ```env
-GROQ_API_KEY=gsk_your_api_key_here
+GROQ_API_KEY=your_api_key_here
 ```
 
-**Get your FREE Groq API key**: https://console.groq.com/
+## Project Structure
 
-### 🤖 Step 4: Test LLM Connection
-
-Create `test_llm.py` to verify Groq is working:
-
-```python
-import os
-from dotenv import load_dotenv
-from groq import Groq
-
-load_dotenv()
-
-client = Groq(api_key=os.getenv('GROQ_API_KEY'))
-
-response = client.chat.completions.create(
-    model="llama-3.1-8b-instant",
-    messages=[{"role": "user", "content": "Hello! Can you hear me?"}]
-)
-
-print("✅ LLM Response:", response.choices[0].message.content)
+```
+my-rag-project/
+├── rag_pipeline.py          # Main RAG system implementation
+├── vector_store.py           # ChromaDB vector store management
+├── json_processor.py         # JSON data loading and processing
+├── test_llm.py              # LLM testing utilities
+├── .env                      # Environment variables (not in git)
+├── .gitignore               # Git ignore rules
+├── documents/               # Your JSON data files
+│   └── project_1_publications.json
+└── chroma_db/              # Vector database (auto-generated)
 ```
 
-**Run it:**
-```bash
-python test_llm.py
-```
+## Usage
 
-**Expected Output:**
-```
-✅ LLM Response: Yes, I can hear you! How can I help you today?
-```
-
-### 📘 Step 5: Prepare Your Data
+### Prepare Your Data
 
 Place your JSON publication data in the `documents/` folder:
-
 ```
 documents/
   └── project_1_publications.json
 ```
 
-**Expected JSON format:**
+Expected JSON format:
 ```json
 [
   {
     "id": "1",
     "title": "Publication Title",
     "username": "author_name",
-    "publication_description": "Full publication content here..."
+    "publication_description": "Full publication content..."
   }
 ]
 ```
 
-### 📦 Step 6: Build Vector Store
-
-Run the vector store script to process and embed your documents:
-
-```bash
-python vector_store.py
-```
-
-**Expected Output:**
-```
-🔍 Loading documents from JSON...
-✅ Loaded 45 publications
-🧩 Chunking documents...
-✅ Created 324 chunks
-💾 Adding to vector store...
-✅ Vector store ready!
-```
-
-### 🎯 Step 7: Run RAG System
+### Run the System
 
 ```bash
 python rag_pipeline.py
 ```
 
-**Try asking:**
-- "What are the main research topics?"
-- "Summarize the key findings"
-- "What methodologies are discussed?"
+## Key Components
 
-Type `quit` to exit.
+### 1. **Vector Store** (`vector_store.py`)
+- Uses ChromaDB for persistent vector storage
+- `all-MiniLM-L6-v2` for embeddings
+- Smart text chunking with overlap
+- Semantic search capabilities
 
-## 📂 Project Structure
+### 2. **JSON Processor** (`json_processor.py`)
+- Loads publication data from JSON
+- Filters publications (min 100 characters)
+- Structures data for RAG system
+
+### 3. **RAG Pipeline** (`rag_pipeline.py`)
+- Integrates vector search + LLM
+- Uses Groq's `llama-3.1-8b-instant` model
+- Context-aware prompt engineering
+- Returns answers with source documents
+
+## Configuration
+
+### Chunking Parameters
+Edit `vector_store.py`:
+```python
+chunk_size = 512    # Tokens per chunk
+overlap = 50        # Token overlap between chunks
+```
+
+### Search Results
+Edit `rag_pipeline.py`:
+```python
+n_results = 3       # Number of documents to retrieve
+```
+
+### LLM Model
+Edit `rag_pipeline.py`:
+```python
+self.model = "llama-3.1-8b-instant"  # Fast and free
+# Or try: "mixtral-8x7b-32768" for longer context
+```
+
+## Dependencies
 
 ```
-my-rag-project/
-├── rag_pipeline.py         # Main RAG system
-├── vector_store.py          # ChromaDB vector operations
-├── json_processor.py        # JSON data loader
-├── test_llm.py             # LLM connection test
-├── documents/               # Your JSON data
-├── chroma_db/              # Auto-generated vector DB
-├── .env                     # API keys (create this)
-└── rag_env/                # Virtual environment
+groq                    # Groq LLM API
+chromadb               # Vector database
+sentence-transformers  # Embedding models
+tiktoken              # Token counting
+python-dotenv         # Environment variables
 ```
 
-## 🧪 Usage
+## Troubleshooting
 
-Run the RAG system:
+### "Groq package not installed"
 ```bash
-python rag_pipeline.py
+pip install groq
 ```
 
-Ask questions about your documents:
-- "What are the main research topics?"
-- "Summarize the key findings"
+### "GROQ_API_KEY not found"
+- Check your `.env` file exists
+- Verify the API key is correct
+- Ensure `.env` is in the project root
 
-Type `quit` to exit.
-
-## 📦 Dependencies
-
-```bash
-pip install groq chromadb sentence-transformers tiktoken python-dotenv
-```
-
-
-
-## 🐛 Troubleshooting
-
-### ❌ "ModuleNotFoundError: No module named 'groq'"
-**Solution:**
-```bash
-# Make sure virtual environment is activated
-rag_env\Scripts\activate     # Windows
-# source rag_env/bin/activate  # Mac/Linux
-
-# Install packages
-pip install groq chromadb sentence-transformers tiktoken python-dotenv
-```
-
-### ❌ "GROQ_API_KEY not found"
-**Solution:**
-1. Check `.env` file exists in project root
-2. Verify format: `GROQ_API_KEY=gsk_your_key_here` (no spaces, no quotes)
-3. Restart your script after creating `.env`
-
-### ❌ "HTTPError: 401 Unauthorized"
-**Solution:**
-- Your Groq API key is invalid or expired
-- Get a new key: https://console.groq.com/keys
-- Update `.env` with new key
-
-### ❌ ChromaDB "Database is locked"
-**Solution:**
-Delete the `chroma_db/` folder and rebuild:
+### ChromaDB Issues
+Delete the `chroma_db/` folder and re-run:
 ```bash
 rmdir /s chroma_db  # Windows
 # rm -rf chroma_db  # Mac/Linux
-python vector_store.py
+python rag_pipeline.py
 ```
 
-### ❌ "No documents loaded"
-**Solution:**
-1. Check `documents/` folder exists
-2. Verify JSON file is named correctly
-3. Ensure JSON structure matches format:
-```json
-[{"id": "1", "title": "...", "username": "...", "publication_description": "..."}]
-```
+## Performance
 
-### ❌ Slow embeddings/search
-**Solution:**
-- First run downloads model (~80MB)
-- Subsequent runs are fast
+- **Search Speed**: ~50ms (ChromaDB)
+- **LLM Response**: ~100-500ms (Groq)
+- **Total Query Time**: < 1 second
 
-## 🚀 Next Steps
+## License
 
-- Add Streamlit web interface
-- Support PDF documents
-- Add conversation memory
-- Deploy as REST API
+MIT License - feel free to use this project for learning and development.
 
-## 📄 License
+## Acknowledgments
 
-MIT License
-
----
-
-**Questions? Open an issue on GitHub!**
+- [Groq](https://groq.com/) for ultra-fast LLM inference
+- [ChromaDB](https://www.trychroma.com/) for vector storage
+- [Sentence Transformers](https://www.sbert.net/) for embeddings
