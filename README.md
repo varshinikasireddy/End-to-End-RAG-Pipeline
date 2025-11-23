@@ -2,6 +2,8 @@
 
 A smart question-answering system that reads your documents and answers questions using AI. Built with Groq LLM, ChromaDB, and Sentence Transformers.
 
+This README will help you understand, set up, run, and extend your RAG system — even if you are new to AI/LLMs.
+
 ## ✨ Features
 
 - ⚡ **Lightning Fast**: Get answers in under 1 second
