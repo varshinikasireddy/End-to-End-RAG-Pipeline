@@ -24,7 +24,7 @@ This README will help you understand, set up, run, and extend your RAG system â€
 
 ```bash
 # Clone this repository
-git clone <your-repo-url>
+git clone https://github.com/varshinikasireddy/End-to-End-RAG-Pipeline.git
 cd my-rag-project
 
 # Create virtual environment
